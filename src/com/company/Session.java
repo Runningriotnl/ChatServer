@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.ArrayList;
 import java.util.List;
 
 public class Session extends Thread  {
@@ -28,7 +27,7 @@ public class Session extends Thread  {
             while ((inputLine = in.readLine()) != null) {
                 System.out.println("Session " + this + " is sending the following message: " + inputLine);
                 for(Session s : clientSessions) {
-                    s.send(inputLine);
+                    s.send(inputLine, this);
                 }
             }
         } catch (IOException e) {
@@ -37,10 +36,10 @@ public class Session extends Thread  {
 
     }
 
-    private void send(String message)  throws IOException {
+    private void send(String message, Session ses)  throws IOException {
         // Writing to the client
         PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-        out.println(message);
+        out.println("From " + ses + ": " + message);
     }
 
 
